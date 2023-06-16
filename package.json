@@ -1,0 +1,32 @@
+{
+  "name": "vue-cms-components",
+  "version": "1.0.0",
+  "description": "vue2 cms system components",
+  "main": "./dist/bundle.js",
+  "module": "./dist/bundle.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rollup --config"
+  },
+  "keywords": [],
+  "author": "1031531798",
+  "license": "ISC",
+  "dependencies": {
+    "@iconify/vue2": "^2.1.0",
+    "@popperjs/core": "^2.11.8",
+    "vue": "2.7.14",
+    "vuex": "^4.0.2"
+  },
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^11.0.0",
+    "eslint": "^8.42.0",
+    "prettier": "^2.8.8",
+    "rollup": "^3.20.2",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-postcss": "^4.0.2",
+    "rollup-plugin-vue": "^5.1.9",
+    "typescript": "^5.1.3"
+  }
+}
