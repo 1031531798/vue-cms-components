@@ -1,17 +1,14 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
     <VccNotification class='notify' :data="[]"></VccNotification>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 export default {
   name: 'App',
   components: {
-    HelloWorld
   }
 }
 </script>
@@ -25,11 +22,11 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .notify {
-  position: absolute;
-  top: 10px;
-  right: 30px;
   height: auto;
 }
 </style>

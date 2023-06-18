@@ -1,0 +1,86 @@
+:root {
+    --popover-bg: #fff;
+  --popover-border: 1px solid #ebeef5;
+}
+.component-notify {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 0 20px;
+}
+.component-notify-popover {
+  padding: 0 !important;
+  width: 200px;
+  background: var(--popover-bg);
+  border-radius: 4px;
+  border: var(--popover-border);
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+}
+.component-notify-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border-bottom: 1px solid rgb(197, 197, 197);
+  padding: 10px;
+}
+.component-notify-header-tabs {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.component-notify-header-tabs-tab {
+  background: #f2f3f4;
+  padding: 5px 10px;
+  border-radius: 10px;
+  margin: 0 5px;
+  cursor: pointer;
+}
+.component-notify-header-tabs-active {
+  color: #fff;
+  background: #42b983 !important;
+}
+::v-deep .component-fade-enter-active,
+.component-fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+::v-deep .component-fade-enter,
+.component-fade-leave-to {
+  opacity: 0;
+}
+#arrow,
+#arrow::before {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: inherit;
+}
+
+#arrow {
+  visibility: hidden;
+}
+
+#arrow::before {
+  visibility: visible;
+  content: '';
+  left: 0;
+  border-top: var(--popover-border);
+  border-left: var(--popover-border);
+  transform: rotate(45deg);
+}
+.component-notify-popover[data-popper-placement^='top'] > #arrow {
+  bottom: -4px;
+}
+
+.component-notify-popover[data-popper-placement^='bottom'] > #arrow {
+  top: -4px;
+
+}
+
+.component-notify-popoverp[data-popper-placement^='left'] > #arrow {
+  right: -4px;
+}
+
+.component-notify-popover[data-popper-placement^='right'] > #arrow {
+  left: -4px;
+}

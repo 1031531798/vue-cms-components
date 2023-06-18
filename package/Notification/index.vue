@@ -2,8 +2,10 @@
   <div :class="prefixCls">
     <div
       :class="`${prefixCls}-popover`"
+      :style="{zIndex: 2001}"
       v-if="isShowNotify"
     >
+      <div id="arrow" data-popper-arrow></div>
       <div :class="`${prefixCls}-header`">
         <div :class="`${prefixCls}-header-tabs`">
           <span
@@ -23,7 +25,7 @@
        <List :data="getMessageList"></List>
       </transition>
     </div>
-    <div :class="`${prefixCls}-control`">
+    <div :class="`${prefixCls}-control`" @mouseenter="mouseenterEvent" @mouseleave="mouseleaveEvent">
       <Icon icon="mdi:bell-outline" width="40" height="40" />
     </div>
   </div>
@@ -33,13 +35,13 @@
 import List from "./List.vue";
 import { createPopper } from '@popperjs/core';
 import { Icon } from '@iconify/vue2';
-
+import './index.css'
 export default {
   data() {
     return {
       prefixCls: "component-notify",
       tableLoading: false,
-      isShowNotify: false,
+      isShowNotify: true,
       tabList: [
         { label: "系统消息", name: "SystemList" },
         // { label: '代办消息', name: 'waitList' }
@@ -54,9 +56,19 @@ export default {
     Icon
   },
   mounted() {
-    const popcorn = document.querySelector(`.${this.prefixCls}-popover`);
     const control = document.querySelector(`.${this.prefixCls}-control`);
-    createPopper(popcorn, control);
+    const tooltip = document.querySelector(`.${this.prefixCls}-popover`);
+    createPopper(control, tooltip, {
+      placement: 'bottom',
+      modifiers: [
+        {
+          name: 'offset',
+          options: {
+            offset: [0, 8],
+          },
+        },
+      ],
+    });
   },
   computed: {
     getMessageList () {
@@ -99,7 +111,14 @@ export default {
   },
   methods: {
     switchMode(value) {
+      console.log(value);
       this.isShowNotify = false;
+    },
+    mouseenterEvent() {
+      console.log("mouseenter");
+    },
+    mouseleaveEvent() {
+      console.log("mouseleave");
     },
     changeTag(tag) {
       if (tag.name !== this.componentsName) {
@@ -115,52 +134,3 @@ export default {
 };
 </script>
 
-<style lang="scss">
-.component-notify {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin: 0 20px;
-  &-popover {
-    padding: 0 !important;
-  }
-  &-button {
-    height: 100%;
-  }
-  &-header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    border-bottom: 1px solid rgb(197, 197, 197);
-    padding: 10px;
-    &-tabs {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      &-tab {
-        background: #f2f3f4;
-        padding: 5px 10px;
-        border-radius: 10px;
-        margin: 0 5px;
-        cursor: pointer;
-      }
-      &-active {
-        color: #fff;
-        background: #42b983 !important;
-      }
-    }
-  }
-
-  span {
-    height: 100%;
-  }
-}
-::v-deep .component-fade-enter-active,
-.component-fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-::v-deep .component-fade-enter,
-.component-fade-leave-to {
-  opacity: 0;
-}
-</style>

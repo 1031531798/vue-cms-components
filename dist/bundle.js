@@ -182,13 +182,41 @@ __vue_render__$1._withStripped = true;
     undefined
   );
 
+function styleInject(css, ref) {
+  if (ref === void 0) ref = {};
+  var insertAt = ref.insertAt;
+  if (!css || typeof document === 'undefined') {
+    return;
+  }
+  var head = document.head || document.getElementsByTagName('head')[0];
+  var style = document.createElement('style');
+  style.type = 'text/css';
+  if (insertAt === 'top') {
+    if (head.firstChild) {
+      head.insertBefore(style, head.firstChild);
+    } else {
+      head.appendChild(style);
+    }
+  } else {
+    head.appendChild(style);
+  }
+  if (style.styleSheet) {
+    style.styleSheet.cssText = css;
+  } else {
+    style.appendChild(document.createTextNode(css));
+  }
+}
+
+var css_248z = ":root {\n    --popover-bg: #fff;\n  --popover-border: 1px solid #ebeef5;\n}\n.component-notify {\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  margin: 0 20px;\n}\n.component-notify-popover {\n  padding: 0 !important;\n  width: 200px;\n  background: var(--popover-bg);\n  border-radius: 4px;\n  border: var(--popover-border);\n  box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);\n}\n.component-notify-header {\n  display: flex;\n  flex-direction: row;\n  justify-content: space-between;\n  border-bottom: 1px solid rgb(197, 197, 197);\n  padding: 10px;\n}\n.component-notify-header-tabs {\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n}\n\n.component-notify-header-tabs-tab {\n  background: #f2f3f4;\n  padding: 5px 10px;\n  border-radius: 10px;\n  margin: 0 5px;\n  cursor: pointer;\n}\n.component-notify-header-tabs-active {\n  color: #fff;\n  background: #42b983 !important;\n}\n::v-deep .component-fade-enter-active,\n.component-fade-leave-active {\n  transition: opacity 0.3s ease;\n}\n::v-deep .component-fade-enter,\n.component-fade-leave-to {\n  opacity: 0;\n}\n#arrow,\n#arrow::before {\n  position: absolute;\n  width: 8px;\n  height: 8px;\n  background: inherit;\n}\n\n#arrow {\n  visibility: hidden;\n}\n\n#arrow::before {\n  visibility: visible;\n  content: '';\n  left: 0;\n  border-top: var(--popover-border);\n  border-left: var(--popover-border);\n  transform: rotate(45deg);\n}\n.component-notify-popover[data-popper-placement^='top'] > #arrow {\n  bottom: -4px;\n}\n\n.component-notify-popover[data-popper-placement^='bottom'] > #arrow {\n  top: -4px;\n\n}\n\n.component-notify-popoverp[data-popper-placement^='left'] > #arrow {\n  right: -4px;\n}\n\n.component-notify-popover[data-popper-placement^='right'] > #arrow {\n  left: -4px;\n}";
+styleInject(css_248z);
+
 //
 var script = {
   data() {
     return {
       prefixCls: "component-notify",
       tableLoading: false,
-      isShowNotify: false,
+      isShowNotify: true,
       tabList: [{
         label: "系统消息",
         name: "SystemList"
@@ -206,9 +234,17 @@ var script = {
     Icon
   },
   mounted() {
-    const popcorn = document.querySelector(`.${this.prefixCls}-popover`);
     const control = document.querySelector(`.${this.prefixCls}-control`);
-    createPopper(popcorn, control);
+    const tooltip = document.querySelector(`.${this.prefixCls}-popover`);
+    createPopper(control, tooltip, {
+      placement: 'bottom',
+      modifiers: [{
+        name: 'offset',
+        options: {
+          offset: [0, 8]
+        }
+      }]
+    });
   },
   computed: {
     getMessageList() {
@@ -242,7 +278,14 @@ var script = {
   },
   methods: {
     switchMode(value) {
+      console.log(value);
       this.isShowNotify = false;
+    },
+    mouseenterEvent() {
+      console.log("mouseenter");
+    },
+    mouseleaveEvent() {
+      console.log("mouseleave");
     },
     changeTag(tag) {
       if (tag.name !== this.componentsName) {
@@ -268,8 +311,10 @@ var __vue_render__ = function () {
     _vm.isShowNotify
       ? _c(
           "div",
-          { class: _vm.prefixCls + "-popover" },
+          { class: _vm.prefixCls + "-popover", style: { zIndex: 2001 } },
           [
+            _c("div", { attrs: { id: "arrow", "data-popper-arrow": "" } }),
+            _vm._v(" "),
             _c("div", { class: _vm.prefixCls + "-header" }, [
               _c(
                 "div",
@@ -311,7 +356,13 @@ var __vue_render__ = function () {
     _vm._v(" "),
     _c(
       "div",
-      { class: _vm.prefixCls + "-control" },
+      {
+        class: _vm.prefixCls + "-control",
+        on: {
+          mouseenter: _vm.mouseenterEvent,
+          mouseleave: _vm.mouseleaveEvent,
+        },
+      },
       [
         _c("Icon", {
           attrs: { icon: "mdi:bell-outline", width: "40", height: "40" },
@@ -325,17 +376,15 @@ var __vue_staticRenderFns__ = [];
 __vue_render__._withStripped = true;
 
   /* style */
-  const __vue_inject_styles__ = function (inject) {
-    if (!inject) return
-    inject("data-v-cafdbd30_0", { source: ".component-notify {\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  margin: 0 20px;\n}\n.component-notify-popover {\n  padding: 0 !important;\n}\n.component-notify-button {\n  height: 100%;\n}\n.component-notify-header {\n  display: flex;\n  flex-direction: row;\n  justify-content: space-between;\n  border-bottom: 1px solid rgb(197, 197, 197);\n  padding: 10px;\n}\n.component-notify-header-tabs {\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n}\n.component-notify-header-tabs-tab {\n  background: #f2f3f4;\n  padding: 5px 10px;\n  border-radius: 10px;\n  margin: 0 5px;\n  cursor: pointer;\n}\n.component-notify-header-tabs-active {\n  color: #fff;\n  background: #42b983 !important;\n}\n.component-notify span {\n  height: 100%;\n}\n::v-deep .component-fade-enter-active,\n.component-fade-leave-active {\n  transition: opacity 0.3s ease;\n}\n::v-deep .component-fade-enter,\n.component-fade-leave-to {\n  opacity: 0;\n}\n\n/*# sourceMappingURL=index.vue.map */", map: {"version":3,"sources":["/Users/zijianlin/ghq/github.com/1031531798/vue-cms-components/package/Notification/index.vue","index.vue"],"names":[],"mappings":"AAsHA;EACA,aAAA;EACA,mBAAA;EACA,mBAAA;EACA,cAAA;ACrHA;ADsHA;EACA,qBAAA;ACpHA;ADsHA;EACA,YAAA;ACpHA;ADsHA;EACA,aAAA;EACA,mBAAA;EACA,8BAAA;EACA,2CAAA;EACA,aAAA;ACpHA;ADqHA;EACA,aAAA;EACA,mBAAA;EACA,mBAAA;ACnHA;ADoHA;EACA,mBAAA;EACA,iBAAA;EACA,mBAAA;EACA,aAAA;EACA,eAAA;AClHA;ADoHA;EACA,WAAA;EACA,8BAAA;AClHA;ADuHA;EACA,YAAA;ACrHA;ADwHA;;EAEA,6BAAA;ACrHA;ADuHA;;EAEA,UAAA;ACpHA;;AAEA,oCAAoC","file":"index.vue","sourcesContent":["<template>\n  <div :class=\"prefixCls\">\n    <div\n      :class=\"`${prefixCls}-popover`\"\n      v-if=\"isShowNotify\"\n    >\n      <div :class=\"`${prefixCls}-header`\">\n        <div :class=\"`${prefixCls}-header-tabs`\">\n          <span\n            :class=\"`${prefixCls}-header-tabs-tab ${\n              componentsName === item.name\n                ? prefixCls + '-header-tabs-active'\n                : ''\n            }`\"\n            v-for=\"item in tabList\"\n            :key=\"item.name\"\n            @click=\"changeTag(item)\"\n            >{{ item.label }}</span\n          >\n        </div>\n      </div>\n      <transition name=\"component-fade\" mode=\"out-in\">\n       <List :data=\"getMessageList\"></List>\n      </transition>\n    </div>\n    <div :class=\"`${prefixCls}-control`\">\n      <Icon icon=\"mdi:bell-outline\" width=\"40\" height=\"40\" />\n    </div>\n  </div>\n</template>\n\n<script>\nimport List from \"./List.vue\";\nimport { createPopper } from '@popperjs/core';\nimport { Icon } from '@iconify/vue2';\n\nexport default {\n  data() {\n    return {\n      prefixCls: \"component-notify\",\n      tableLoading: false,\n      isShowNotify: false,\n      tabList: [\n        { label: \"系统消息\", name: \"SystemList\" },\n        // { label: '代办消息', name: 'waitList' }\n      ],\n      tabActive: \"SystemList\",\n      componentsName: \"SystemList\",\n      notifyLoading: false,\n    };\n  },\n  components: {\n    List,\n    Icon\n  },\n  mounted() {\n    const popcorn = document.querySelector(`.${this.prefixCls}-popover`);\n    const control = document.querySelector(`.${this.prefixCls}-control`);\n    createPopper(popcorn, control);\n  },\n  computed: {\n    getMessageList () {\n      return {\n\n      }\n    }\n  },\n  directives: {\n    // 是否在dom外\n    clickOutside: {\n      bind(el, binding, node) {\n        el.event = function (event) {\n          // 判断当前点击是否非Dom范围\n          const popover = document.getElementsByClassName(\n            \"aochen-notify-popover\"\n          )[0];\n          const detail = document.getElementsByClassName(\"notify-detail\")[0];\n          if (\n            el !== event.target &&\n            !el.contains(event.target) &&\n            popover !== event.target &&\n            !popover.contains(event.target)\n          ) {\n            if (detail) {\n              if (detail !== event.target && !detail.contains(event.target)) {\n                node.context[binding.expression](event);\n              }\n            } else {\n              node.context[binding.expression](event);\n            }\n          }\n        };\n        document.body.addEventListener(\"click\", el.event, true);\n      },\n      unbind(el) {\n        document.body.removeEventListener(\"click\", el.event, true);\n      },\n    },\n  },\n  methods: {\n    switchMode(value) {\n      this.isShowNotify = false;\n    },\n    changeTag(tag) {\n      if (tag.name !== this.componentsName) {\n        this.componentsName = tag.name;\n      }\n    },\n    moreMessage() {\n    },\n    setLoading(flag) {\n      this.notifyLoading = flag;\n    },\n  },\n};\n</script>\n\n<style lang=\"scss\">\n.component-notify {\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  margin: 0 20px;\n  &-popover {\n    padding: 0 !important;\n  }\n  &-button {\n    height: 100%;\n  }\n  &-header {\n    display: flex;\n    flex-direction: row;\n    justify-content: space-between;\n    border-bottom: 1px solid rgb(197, 197, 197);\n    padding: 10px;\n    &-tabs {\n      display: flex;\n      flex-direction: row;\n      align-items: center;\n      &-tab {\n        background: #f2f3f4;\n        padding: 5px 10px;\n        border-radius: 10px;\n        margin: 0 5px;\n        cursor: pointer;\n      }\n      &-active {\n        color: #fff;\n        background: #42b983 !important;\n      }\n    }\n  }\n\n  span {\n    height: 100%;\n  }\n}\n::v-deep .component-fade-enter-active,\n.component-fade-leave-active {\n  transition: opacity 0.3s ease;\n}\n::v-deep .component-fade-enter,\n.component-fade-leave-to {\n  opacity: 0;\n}\n</style>\n",".component-notify {\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  margin: 0 20px;\n}\n.component-notify-popover {\n  padding: 0 !important;\n}\n.component-notify-button {\n  height: 100%;\n}\n.component-notify-header {\n  display: flex;\n  flex-direction: row;\n  justify-content: space-between;\n  border-bottom: 1px solid rgb(197, 197, 197);\n  padding: 10px;\n}\n.component-notify-header-tabs {\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n}\n.component-notify-header-tabs-tab {\n  background: #f2f3f4;\n  padding: 5px 10px;\n  border-radius: 10px;\n  margin: 0 5px;\n  cursor: pointer;\n}\n.component-notify-header-tabs-active {\n  color: #fff;\n  background: #42b983 !important;\n}\n.component-notify span {\n  height: 100%;\n}\n\n::v-deep .component-fade-enter-active,\n.component-fade-leave-active {\n  transition: opacity 0.3s ease;\n}\n\n::v-deep .component-fade-enter,\n.component-fade-leave-to {\n  opacity: 0;\n}\n\n/*# sourceMappingURL=index.vue.map */"]}, media: undefined });
-
-  };
+  const __vue_inject_styles__ = undefined;
   /* scoped */
   const __vue_scope_id__ = undefined;
   /* module identifier */
   const __vue_module_identifier__ = undefined;
   /* functional template */
   const __vue_is_functional_template__ = false;
+  /* style inject */
+  
   /* style inject SSR */
   
   /* style inject shadow dom */
@@ -350,7 +399,7 @@ __vue_render__._withStripped = true;
     __vue_is_functional_template__,
     __vue_module_identifier__,
     false,
-    createInjector,
+    undefined,
     undefined,
     undefined
   );
