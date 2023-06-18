@@ -7,7 +7,9 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rollup --config"
+    "dev": "cd example && npm run serve",
+    "build": "rollup --config",
+    "watch": "rollup --config --watch"
   },
   "keywords": [],
   "author": "1031531798",
