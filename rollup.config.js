@@ -1,8 +1,9 @@
 import { defineConfig } from 'rollup';
 import vue from 'rollup-plugin-vue';
-import babel from 'rollup-plugin-babel';
-import commonjs from 'rollup-plugin-commonjs';
-import postcss from 'rollup-plugin-postcss'
+import babel from '@rollup/plugin-babel';
+import commonjs from '@rollup/plugin-commonjs';
+import scss from 'rollup-plugin-scss'
+import image from '@rollup/plugin-image';
 
 export default defineConfig({
     input: 'src/main.js',
@@ -15,6 +16,7 @@ export default defineConfig({
       vue(),
       babel(),
       commonjs(),
-      postcss()
+      scss(),
+      image()
     ]
 });
