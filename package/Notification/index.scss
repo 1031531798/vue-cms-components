@@ -1,7 +1,6 @@
-:root {
-    --popover-bg: #fff;
-  --popover-border: 1px solid #ebeef5;
-}
+
+$--popover-bg: #fff;
+$--popover-border: 1px solid #ebeef5;
 .component-notify {
   display: flex;
   flex-direction: row;
@@ -10,11 +9,10 @@
 }
 .component-notify-popover {
   padding: 0 !important;
-  width: 200px;
-  background: var(--popover-bg);
+  background: $--popover-bg;
   border-radius: 4px;
-  border: var(--popover-border);
-  box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+  border: $--popover-border;
+  boh-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
 }
 .component-notify-header {
   display: flex;
@@ -64,8 +62,9 @@
   visibility: visible;
   content: '';
   left: 0;
-  border-top: var(--popover-border);
-  border-left: var(--popover-border);
+  top: -1px;
+  border-top: $--popover-border;
+  border-left: $--popover-border;
   transform: rotate(45deg);
 }
 .component-notify-popover[data-popper-placement^='top'] > #arrow {

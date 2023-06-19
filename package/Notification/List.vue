@@ -1,20 +1,86 @@
 <template>
-  <div>
-    <div>通知1</div>
+  <div :class="prefixCls">
+    <ul
+      :class="`${prefixCls}-main`"
+      v-infinite-scroll="notifyLoad"
+      style="overflow: auto"
+      v-if="data.length"
+    >
+      <li
+        v-for="item in data"
+        :class="`${prefixCls}-main-item`"
+        :ref="item.id"
+        :key="item.id"
+        @click="setNotify(item)"
+      >
+        <img :src="item.avatar" alt="avatar" :class="`${prefixCls}-main-item-avatar`" />
+        <div :class="`${prefixCls}-main-item-title`">
+          <span class="text-ellipsis">{{ item.msgContent }}</span>
+          <div :class="`${prefixCls}-main-item-title-desc`">
+            <div>{{ item.sendDate }}</div>
+            <div style="margin-left: 10px">{{ item.sendUserName }}</div>
+          </div>
+        </div>
+      </li>
+      <li :class="`${prefixCls}-hint`">
+        <span>没有更多了...</span>
+      </li>
+    </ul>
+    <div :class="`${prefixCls}-empty`" v-else>
+      <img src="./image/empty.png" width="150" alt="empty" />
+      <span>暂无未读信息</span>
+    </div>
   </div>
 </template>
 
 <script>
+import "./list.scss";
 export default {
-  name: 'NotificationList',
-  data () {
+  name: "NotificationList",
+  data() {
     return {
-
+      prefixCls: "components-notify-list",
+      notifyList: [],
+      moveId: "",
+    };
+  },
+  props: {
+    data: {
+      type: Array,
+      default: () => []
     }
-  }
-}
+  },
+  computed: {},
+  mounted() {
+    this.getList();
+  },
+  methods: {
+    getList() {},
+    notifyLoad() {},
+    // 已读移除消息
+    moveMsg(id) {
+      const cell = this.$refs[id][0];
+      cell.className =
+        cell.className + " animate__animated animate__fadeOutLeft";
+      // 设置移除后的重排
+      setTimeout(() => {
+        cell.style.height = 0;
+        cell.style.padding = 0;
+      }, 600);
+      // 重拍结束后删除元素
+      setTimeout(() => {
+        cell.remove();
+      }, 1000);
+    },
+    // 点击已读
+    setNotify(item) {
+      // 去除消息
+      this.moveMsg(item.id);
+      this.$emit("move");
+    },
+  },
+};
 </script>
-
 <style lang="scss" scoped>
-
+@import "./list.scss";
 </style>

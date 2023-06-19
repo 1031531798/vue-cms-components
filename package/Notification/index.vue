@@ -1,31 +1,36 @@
 <template>
   <div :class="prefixCls">
-    <div
-      :class="`${prefixCls}-popover`"
-      :style="{zIndex: 2001}"
-      v-if="isShowNotify"
-    >
-      <div id="arrow" data-popper-arrow></div>
-      <div :class="`${prefixCls}-header`">
-        <div :class="`${prefixCls}-header-tabs`">
-          <span
-            :class="`${prefixCls}-header-tabs-tab ${
-              componentsName === item.name
-                ? prefixCls + '-header-tabs-active'
-                : ''
-            }`"
-            v-for="item in tabList"
-            :key="item.name"
-            @click="changeTag(item)"
-            >{{ item.label }}</span
-          >
+    <transition name="component-fade" mode="out-in">
+      <div
+        :class="`${prefixCls}-popover`"
+        :style="{ zIndex: 2001 }"
+        v-show="isShowNotify"
+      >
+        <div id="arrow" data-popper-arrow></div>
+        <div :class="`${prefixCls}-header`">
+          <div :class="`${prefixCls}-header-tabs`">
+            <span
+              :class="`${prefixCls}-header-tabs-tab ${
+                componentsName === item.name
+                  ? prefixCls + '-header-tabs-active'
+                  : ''
+              }`"
+              v-for="item in tabList"
+              :key="item.name"
+              @click="changeTag(item)"
+              >{{ item.label }}</span
+            >
+          </div>
         </div>
+        <List :data="getMessageList"></List>
       </div>
-      <transition name="component-fade" mode="out-in">
-       <List :data="getMessageList"></List>
-      </transition>
-    </div>
-    <div :class="`${prefixCls}-control`" @mouseenter="mouseenterEvent" @mouseleave="mouseleaveEvent">
+    </transition>
+    <div
+      :class="`${prefixCls}-control`"
+      @click="clickEvent"
+      @mouseenter="mouseenterEvent"
+      @mouseleave="mouseleaveEvent"
+    >
       <Icon icon="mdi:bell-outline" width="40" height="40" />
     </div>
   </div>
@@ -33,9 +38,8 @@
 
 <script>
 import List from "./List.vue";
-import { createPopper } from '@popperjs/core';
-import { Icon } from '@iconify/vue2';
-import './index.css'
+import { createPopper } from "@popperjs/core";
+import { Icon } from "@iconify/vue2";
 export default {
   data() {
     return {
@@ -51,18 +55,24 @@ export default {
       notifyLoading: false,
     };
   },
+  props: {
+    trigger: {
+      type: String,
+      default: "click",
+    },
+  },
   components: {
     List,
-    Icon
+    Icon,
   },
   mounted() {
     const control = document.querySelector(`.${this.prefixCls}-control`);
     const tooltip = document.querySelector(`.${this.prefixCls}-popover`);
     createPopper(control, tooltip, {
-      placement: 'bottom',
+      placement: "bottom",
       modifiers: [
         {
-          name: 'offset',
+          name: "offset",
           options: {
             offset: [0, 8],
           },
@@ -71,11 +81,11 @@ export default {
     });
   },
   computed: {
-    getMessageList () {
-      return {
-
-      }
-    }
+    getMessageList() {
+      return [
+        {id: '1', msgContent: "通知此事 项目即将开始 请做好安全防范工作", sendDate: '2023-6-12 12:51:22', avatar: "https://yt3.ggpht.com/ytc/AGIKgqPrNKvseSZ9dhpgVu4gsK4vojDXA1ZNjTFmPfiu-Q=s88-c-k-c0x00ffffff-no-rj" }
+      ];
+    },
   },
   directives: {
     // 是否在dom外
@@ -114,6 +124,10 @@ export default {
       console.log(value);
       this.isShowNotify = false;
     },
+    clickEvent() {
+      if (this.trigger !== "click") return;
+      this.isShowNotify = !this.isShowNotify;
+    },
     mouseenterEvent() {
       console.log("mouseenter");
     },
@@ -125,12 +139,13 @@ export default {
         this.componentsName = tag.name;
       }
     },
-    moreMessage() {
-    },
+    moreMessage() {},
     setLoading(flag) {
       this.notifyLoading = flag;
     },
   },
 };
 </script>
-
+<style lang="scss" scoped>
+@import "./index.scss";
+</style>
