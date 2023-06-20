@@ -4,6 +4,7 @@ import babel from '@rollup/plugin-babel';
 import commonjs from '@rollup/plugin-commonjs';
 import scss from 'rollup-plugin-scss'
 import image from '@rollup/plugin-image';
+import typescript from "@rollup/plugin-typescript";
 
 export default defineConfig({
     input: 'src/main.js',
@@ -13,6 +14,7 @@ export default defineConfig({
         sourcemap: false
     }],
     plugins: [
+      typescript(),
       vue(),
       babel(),
       commonjs(),

@@ -1,0 +1,33 @@
+{
+  "framework": "vue",
+  "name": "vue-cms-components",
+  "version": "1.0.0",
+  "description-markup": "markdown",
+  "contributions": {
+    "html": {
+      "vue-components": [
+        {
+          "name": "VccNotifications",
+          "description": "Notifications and message",
+          "props": [
+            {
+              "name": "list",
+              "description": "message data",
+              "type": "any[]"
+            },
+            {
+              "name": "tabList",
+              "description": "tab data",
+              "type": "NotificationTab[]"
+            },
+            {
+              "name": "hintText",
+              "description": "hint text",
+              "type": "string"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,10 +1,18 @@
 {
   "name": "vue-cms-components",
-  "version": "1.0.0",
+  "version": "1.0.6",
   "description": "vue2 cms system components",
   "main": "./dist/bundle.js",
   "module": "./dist/bundle.js",
+  "types": "types/index.d.ts",
+  "typings": "types/index.d.ts",
   "type": "module",
+  "files": [
+    "dist",
+    "types",
+    "web-types.json"
+  ],
+  "web-types": "./web-types.json",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "cd example && npm run serve",
