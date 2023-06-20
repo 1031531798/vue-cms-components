@@ -12,7 +12,8 @@ $--popover-border: 1px solid #ebeef5;
   background: $--popover-bg;
   border-radius: 4px;
   border: $--popover-border;
-  boh-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+  min-width: 300px;
 }
 .component-notify-header {
   display: flex;

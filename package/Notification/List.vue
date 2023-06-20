@@ -27,8 +27,10 @@
       </li>
     </ul>
     <div :class="`${prefixCls}-empty`" v-else>
-      <img src="./image/empty.png" width="150" alt="empty" />
-      <span>暂无未读信息</span>
+      <slot name="empty">
+        <img src="./image/empty.png" width="150" alt="empty" />
+        <span>暂无未读信息</span>
+      </slot>
     </div>
   </div>
 </template>

@@ -8,21 +8,27 @@
       >
         <div id="arrow" data-popper-arrow></div>
         <div :class="`${prefixCls}-header`">
-          <div :class="`${prefixCls}-header-tabs`">
+          <slot name="header">
+            <div :class="`${prefixCls}-header-tabs`">
             <span
               :class="`${prefixCls}-header-tabs-tab ${
                 componentsName === item.name
                   ? prefixCls + '-header-tabs-active'
                   : ''
               }`"
-              v-for="item in tabList"
+              v-for="item in headerList"
               :key="item.name"
               @click="changeTag(item)"
-              >{{ item.label }}</span
+            >{{ item.label }}</span
             >
-          </div>
+            </div>
+          </slot>
         </div>
-        <List :data="getMessageList"></List>
+        <List :data="getMessageList">
+          <template #empty>
+            <slot name="empty"></slot>
+          </template>
+        </List>
       </div>
     </transition>
     <div
@@ -31,7 +37,9 @@
       @mouseenter="mouseenterEvent"
       @mouseleave="mouseleaveEvent"
     >
-      <Icon icon="mdi:bell-outline" width="40" height="40" />
+      <slot>
+        <Icon icon="mdi:bell-outline" width="40" height="40" />
+      </slot>
     </div>
   </div>
 </template>
@@ -41,6 +49,7 @@ import List from "./List.vue";
 import { createPopper } from "@popperjs/core";
 import { Icon } from "@iconify/vue2";
 export default {
+  name: 'VccNotifications',
   data() {
     return {
       prefixCls: "component-notify",
@@ -48,8 +57,8 @@ export default {
       isShowNotify: true,
       tabList: [
         { label: "系统消息", name: "SystemList" },
-        // { label: '代办消息', name: 'waitList' }
       ],
+      popper: undefined,
       tabActive: "SystemList",
       componentsName: "SystemList",
       notifyLoading: false,
@@ -60,6 +69,14 @@ export default {
       type: String,
       default: "click",
     },
+    headerList: {
+      type: Array,
+      default: () => [],
+    },
+    list: {
+      type: Array,
+      default: () => [],
+    }
   },
   components: {
     List,
@@ -68,23 +85,23 @@ export default {
   mounted() {
     const control = document.querySelector(`.${this.prefixCls}-control`);
     const tooltip = document.querySelector(`.${this.prefixCls}-popover`);
-    createPopper(control, tooltip, {
-      placement: "bottom",
-      modifiers: [
-        {
-          name: "offset",
-          options: {
-            offset: [0, 8],
+    if (control && tooltip) {
+      this.popper = createPopper(control, tooltip, {
+        placement: "bottom",
+        modifiers: [
+          {
+            name: "offset",
+            options: {
+              offset: [0, 8],
+            },
           },
-        },
-      ],
-    });
+        ],
+      });
+    }
   },
   computed: {
     getMessageList() {
-      return [
-        {id: '1', msgContent: "通知此事 项目即将开始 请做好安全防范工作", sendDate: '2023-6-12 12:51:22', avatar: "https://yt3.ggpht.com/ytc/AGIKgqPrNKvseSZ9dhpgVu4gsK4vojDXA1ZNjTFmPfiu-Q=s88-c-k-c0x00ffffff-no-rj" }
-      ];
+      return this.list || []
     },
   },
   directives: {
