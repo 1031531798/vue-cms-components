@@ -8,12 +8,18 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "cd example && npm run serve",
+    "server": "concurrently \"pnpm dev\" \"pnpm watch\"",
     "build": "rollup --config",
     "watch": "rollup --config --watch"
   },
   "keywords": [],
   "author": "1031531798",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/1031531798/vue-cms-components"
+  },
   "license": "ISC",
+  "bugs": "https://github.com/1031531798/vue-cms-components/issues",
   "dependencies": {
     "@iconify/vue2": "^2.1.0",
     "@popperjs/core": "^2.11.8",
@@ -26,6 +32,7 @@
     "@rollup/plugin-commonjs": "^25.0.1",
     "@rollup/plugin-image": "^3.0.2",
     "@rollup/plugin-typescript": "^11.0.0",
+    "concurrently": "^8.2.0",
     "eslint": "^8.42.0",
     "prettier": "^2.8.8",
     "rollup": "^3.20.2",
