@@ -1,7 +1,8 @@
-import Notifications from '../package/Notification/index.vue'
-import 'animate.css'
-export function install (app) {
-    app.component('VccNotification', Notifications);
+import Notifications from "../package/Notification/index.vue";
+import "animate.css";
+export function install(app) {
+  app.component("VccNotification", VccNotifications);
 }
 
-export default { install, Notifications }
+export const VccNotifications = Notifications
+export default { install };
