@@ -26,6 +26,37 @@
               "type": "string"
             }
           ]
+        },
+        {
+          "name": "VccIconButton",
+          "description": "icon and button",
+          "props": [
+            {
+              "name": "icon",
+              "description": "icon class",
+              "type": "string"
+            },
+            {
+              "name": "type",
+              "description": "button type",
+              "type": "'info' | 'success' | 'danger' | 'warning' | 'primary'"
+            },
+            {
+              "name": "disabled",
+              "description": "disabled",
+              "type": "boolean"
+            },
+            {
+              "name": "label",
+              "description": "label text",
+              "type": "string"
+            },
+            {
+              "name": "color",
+              "description": "icon color",
+              "type": "string"
+            }
+          ]
         }
       ]
     }

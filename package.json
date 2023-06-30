@@ -1,6 +1,6 @@
 {
   "name": "vue-cms-components",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "vue2 cms system components",
   "main": "./dist/bundle.js",
   "module": "./dist/bundle.js",
