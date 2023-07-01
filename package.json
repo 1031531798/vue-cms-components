@@ -1,6 +1,6 @@
 {
   "name": "vue-cms-components",
-  "version": "1.0.7",
+  "version": "1.0.9",
   "description": "vue2 cms system components",
   "main": "./dist/bundle.js",
   "module": "./dist/bundle.js",
@@ -10,6 +10,7 @@
   "files": [
     "dist",
     "types",
+    "public",
     "web-types.json"
   ],
   "web-types": "./web-types.json",
@@ -29,7 +30,6 @@
   "license": "ISC",
   "bugs": "https://github.com/1031531798/vue-cms-components/issues",
   "dependencies": {
-    "@iconify/vue2": "^2.1.0",
     "@popperjs/core": "^2.11.8",
     "animate.css": "^4.1.1",
     "vue": "2.7.14",
