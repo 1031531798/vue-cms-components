@@ -13,7 +13,7 @@
 
 <script>
 export default {
-  name: "iconButton",
+  name: "VccIconButton",
   props: {
     icon: {
       type: String,
