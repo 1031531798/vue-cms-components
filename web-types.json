@@ -57,6 +57,71 @@
               "type": "string"
             }
           ]
+        },
+        {
+          "name": "VccFileUploader",
+          "description": "file upload components",
+          "props": [
+            {
+              "name": "currentFiles",
+              "description": "文件集合对象",
+              "type": "array"
+            },
+            {
+              "name": "action",
+              "description": "upload url",
+              "type": "string"
+            },
+            {
+              "name": "name",
+              "description": "upload上传时文件的key",
+              "default": "file",
+              "type": "string"
+            },
+            {
+              "name": "requestMethod",
+              "description": "upload上传method",
+              "default": "post",
+              "type": "string"
+            },
+            {
+              "name": "params",
+              "description": "upload 参数",
+              "type": "object"
+            },
+            {
+              "name": "headers",
+              "description": "upload headers 请求头",
+              "type": "object"
+            },
+            {
+              "name": "readOnly",
+              "description": "是否只读",
+              "type": "boolean"
+            },
+            {
+              "name": "showHint",
+              "description": "是否显示文件类型提示",
+              "type": "boolean"
+            },
+            {
+              "name": "imgOnly",
+              "description": "是否只能上传图片",
+              "type": "boolean"
+            },
+            {
+              "name": "limit",
+              "description": "文件上传数量限制",
+              "default": "5",
+              "type": "number"
+            },
+            {
+              "name": "fileSize",
+              "description": "文件上传大小限制(MB)",
+              "default": "30",
+              "type": "number"
+            }
+          ]
         }
       ]
     }
