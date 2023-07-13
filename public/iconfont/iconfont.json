@@ -6,6 +6,34 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "5388009",
+      "name": "云上传_o",
+      "font_class": "yunshangchuan_o",
+      "unicode": "ebb3",
+      "unicode_decimal": 60339
+    },
+    {
+      "icon_id": "11893619",
+      "name": "上传",
+      "font_class": "shangchuan",
+      "unicode": "e615",
+      "unicode_decimal": 58901
+    },
+    {
+      "icon_id": "5831330",
+      "name": "预览",
+      "font_class": "yulan",
+      "unicode": "e655",
+      "unicode_decimal": 58965
+    },
+    {
+      "icon_id": "11481159",
+      "name": "下载",
+      "font_class": "xiazai",
+      "unicode": "e652",
+      "unicode_decimal": 58962
+    },
+    {
       "icon_id": "2380665",
       "name": "天气",
       "font_class": "tianqi",
