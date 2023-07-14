@@ -1,12 +1,18 @@
+import { jsonParse } from "./util.js";
+
 export function request({ method, url, data, params, headers, progress }) {
   return new Promise((resolve, reject) => {
     // 创建一个新的 XMLHttpRequest 对象
     const xhr = new XMLHttpRequest();
     // 请求成功
     xhr.onload = (res) => {
-      const data = JSON.parse(res.target.response)
-      console.log(data);
-      resolve(data);
+      const {status} = res.target
+      if (status === 200) {
+        const data = jsonParse(res.target.response)
+        resolve(data);
+      }else {
+        reject(res.target)
+      }
     };
     // 请求失败
     xhr.onerror = (res) => {
