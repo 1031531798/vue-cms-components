@@ -89,12 +89,10 @@ $--icon-button-info-color: #909497;
   align-items: center;
   justify-content: space-between;
   color: #fdfefe;
-  background: #fdfefe;
   margin: 5px;
   background-color: transparent;
   cursor: pointer;
   height: 40px;
-  margin-right: 5px;
   transition: all 0.3s ease-in;
   min-width: 40px;
   i {
