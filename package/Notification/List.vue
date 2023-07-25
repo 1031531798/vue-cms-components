@@ -2,23 +2,28 @@
   <div :class="prefixCls">
     <ul
       :class="`${prefixCls}-main`"
-      v-infinite-scroll="notifyLoad"
       style="overflow: auto"
       v-if="data.length"
     >
       <li
         v-for="item in data"
         :class="`${prefixCls}-main-item`"
-        :ref="item.id"
-        :key="item.id"
+        :ref="getMessageProps('key', item)"
+        :key="getMessageProps('key', item)"
+        :title="getMessageProps('content', item)"
         @click="setNotify(item)"
       >
-        <img :src="item.avatar" alt="avatar" :class="`${prefixCls}-main-item-avatar`" />
+        <img
+          v-if="getMessageProps('avatar', item)"
+          :src="getMessageProps('avatar', item)"
+          alt="avatar"
+          :class="`${prefixCls}-main-item-avatar`"
+        />
         <div :class="`${prefixCls}-main-item-title`">
-          <span class="text-ellipsis">{{ item.msgContent }}</span>
+          <span class="text-ellipsis">{{ getMessageProps('content', item)}}</span>
           <div :class="`${prefixCls}-main-item-title-desc`">
-            <div>{{ item.sendDate }}</div>
-            <div style="margin-left: 10px">{{ item.sendUserName }}</div>
+            <div>{{ getMessageProps('time', item)}}</div>
+            <div style="margin-left: 10px">{{ getMessageProps('description', item)}}</div>
           </div>
         </div>
       </li>
@@ -49,16 +54,33 @@ export default {
   props: {
     data: {
       type: Array,
-      default: () => []
+      default: () => [],
+    },
+    props: {
+      type: Object,
+      required: true,
+    },
+  },
+  computed: {
+    getMessageProps () {
+      return (key, item) => {
+        const defaultProps = {
+          key: "id",
+          avatar: "avatar",
+          content: 'content',
+          description: "description",
+          time: "time",
+          ...this.props
+        }
+        return item[defaultProps[key]] || ''
+      }
     }
   },
-  computed: {},
   mounted() {
     this.getList();
   },
   methods: {
     getList() {},
-    notifyLoad() {},
     // 已读移除消息
     moveMsg(id) {
       const cell = this.$refs[id][0];
@@ -78,7 +100,7 @@ export default {
     setNotify(item) {
       // 去除消息
       this.moveMsg(item.id);
-      this.$emit("move");
+      this.$emit("read", item);
     },
   },
 };

@@ -3,10 +3,10 @@
     <transition name="component-fade" mode="out-in">
       <div
         :class="`${prefixCls}-popover`"
-        :style="{ zIndex: 2001 }"
+        :style="{ zIndex: getZIndex() }"
         v-show="isShowNotify"
       >
-        <div id="arrow" data-popper-arrow></div>
+        <div class="popper-arrow" data-popper-arrow></div>
         <div :class="`${prefixCls}-header`">
           <slot name="header">
             <div :class="`${prefixCls}-header-tabs`">
@@ -24,7 +24,11 @@
             </div>
           </slot>
         </div>
-        <List :data="getMessageList">
+        <List
+          :props="messageProps"
+          :data="getMessageList"
+          @read="handleReadMsg"
+        >
           <template #empty>
             <slot name="empty"></slot>
           </template>
@@ -37,7 +41,9 @@
       @mouseenter="mouseenterEvent"
       @mouseleave="mouseleaveEvent"
     >
-      <slot> <IconFontSvg icon="icon-tongzhi" size="50" /> </slot>
+      <slot>
+        <IconFontSvg icon="icon-tongzhi" size="50" />
+      </slot>
     </div>
   </div>
 </template>
@@ -45,8 +51,8 @@
 <script>
 import List from "./List.vue";
 import { createPopper } from "@popperjs/core";
-import { shallowReactive } from "vue";
 import IconFontSvg from "../../src/components/Icon/IconFontSvg.vue";
+import { getZIndex } from "../../src/utils/util.js";
 export default {
   name: "VccNotifications",
   data() {
@@ -65,6 +71,18 @@ export default {
     trigger: {
       type: String,
       default: "click",
+    },
+    messageProps: {
+      type: Object,
+      default: () => {
+        return {
+          key: "id",
+          avatar: "avatar",
+          content: "content",
+          description: "description",
+          time: "time",
+        };
+      },
     },
     headerList: {
       type: Array,
@@ -87,44 +105,21 @@ export default {
       return this.list || [];
     },
   },
-  directives: {
-    // 是否在dom外
-    clickOutside: {
-      bind(el, binding, node) {
-        el.event = function (event) {
-          // 判断当前点击是否非Dom范围
-          const popover = document.getElementsByClassName(
-            "component-notify-popover"
-          )[0];
-          const detail = document.getElementsByClassName("notify-detail")[0];
-          if (
-            el !== event.target &&
-            !el.contains(event.target) &&
-            popover !== event.target &&
-            !popover.contains(event.target)
-          ) {
-            if (detail) {
-              if (detail !== event.target && !detail.contains(event.target)) {
-                node.context[binding.expression](event);
-              }
-            } else {
-              node.context[binding.expression](event);
-            }
-          }
-        };
-        document.body.addEventListener("click", el.event, true);
-      },
-      unbind(el) {
-        document.body.removeEventListener("click", el.event, true);
-      },
-    },
-  },
   methods: {
-    shallowReactive,
+    getZIndex,
+    // 判断是否点击dom外
+    watchClickOut(e) {
+      const { target } = e;
+      const inEl = this.$el.contains(target);
+      if (!inEl) {
+        this.isShowNotify = false;
+      }
+    },
     addPopover() {
       const control = document.querySelector(`.${this.prefixCls}-control`);
       const tooltip = document.querySelector(`.${this.prefixCls}-popover`);
       if (control && tooltip) {
+        const arrow = document.querySelector("#arrow");
         this.popper = createPopper(control, tooltip, {
           placement: "bottom",
           modifiers: [
@@ -138,10 +133,21 @@ export default {
         });
       }
     },
+    handleReadMsg(item) {
+      console.log(item);
+      this.$emit("read", item);
+    },
     switchMode() {
       this.isShowNotify = !this.isShowNotify;
+      if (this.isShowNotify) {
+        document.addEventListener("click", this.watchClickOut);
+      } else {
+        document.removeEventListener("click", this.watchClickOut);
+      }
       this.$nextTick(() => {
         if (!this.popper) this.addPopover();
+        // 更新popper 定位
+        this.popper.update();
       });
     },
     clickEvent() {
