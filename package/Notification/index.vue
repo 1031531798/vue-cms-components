@@ -2,7 +2,7 @@
   <div :class="prefixCls">
     <transition name="component-fade" mode="out-in">
       <div
-        :class="`${prefixCls}-popover`"
+        :class="`${prefixCls}-popover ${popperClass}`"
         :style="{ zIndex: getZIndex() }"
         v-show="isShowNotify"
       >
@@ -27,8 +27,12 @@
         <List
           :props="messageProps"
           :data="getMessageList"
+          :move-animate="moveAnimate"
           @read="handleReadMsg"
         >
+          <!--          <template #message slot-scope="{data}">-->
+          <!--            <div>{{data.id}}</div>-->
+          <!--          </template>-->
           <template #empty>
             <slot name="empty"></slot>
           </template>
@@ -72,6 +76,10 @@ export default {
       type: String,
       default: "click",
     },
+    moveAnimate: {
+      type: Boolean,
+      default: true,
+    },
     messageProps: {
       type: Object,
       default: () => {
@@ -83,6 +91,9 @@ export default {
           time: "time",
         };
       },
+    },
+    popperClass: {
+      type: String,
     },
     headerList: {
       type: Array,
@@ -154,12 +165,8 @@ export default {
       if (this.trigger !== "click") return;
       this.switchMode();
     },
-    mouseenterEvent() {
-      console.log("mouseenter");
-    },
-    mouseleaveEvent() {
-      console.log("mouseleave");
-    },
+    mouseenterEvent() {},
+    mouseleaveEvent() {},
     changeTag(tag) {
       if (tag.name !== this.componentsName) {
         this.componentsName = tag.name;

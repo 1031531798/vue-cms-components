@@ -1,10 +1,6 @@
 <template>
   <div :class="prefixCls">
-    <ul
-      :class="`${prefixCls}-main`"
-      style="overflow: auto"
-      v-if="data.length"
-    >
+    <ul :class="`${prefixCls}-main`" style="overflow: auto" v-if="data.length">
       <li
         v-for="item in data"
         :class="`${prefixCls}-main-item`"
@@ -13,6 +9,7 @@
         :title="getMessageProps('content', item)"
         @click="setNotify(item)"
       >
+        <slot name="message" :data="item"></slot>
         <img
           v-if="getMessageProps('avatar', item)"
           :src="getMessageProps('avatar', item)"
@@ -20,10 +17,14 @@
           :class="`${prefixCls}-main-item-avatar`"
         />
         <div :class="`${prefixCls}-main-item-title`">
-          <span class="text-ellipsis">{{ getMessageProps('content', item)}}</span>
+          <span class="text-ellipsis">{{
+            getMessageProps("content", item)
+          }}</span>
           <div :class="`${prefixCls}-main-item-title-desc`">
-            <div>{{ getMessageProps('time', item)}}</div>
-            <div style="margin-left: 10px">{{ getMessageProps('description', item)}}</div>
+            <div>{{ getMessageProps("time", item) }}</div>
+            <div style="margin-left: 10px">
+              {{ getMessageProps("description", item) }}
+            </div>
           </div>
         </div>
       </li>
@@ -60,23 +61,29 @@ export default {
       type: Object,
       required: true,
     },
+    moveAnimate: {
+      type: Boolean,
+      default: true,
+    },
   },
   computed: {
-    getMessageProps () {
+    getMessageProps() {
       return (key, item) => {
         const defaultProps = {
           key: "id",
           avatar: "avatar",
-          content: 'content',
+          content: "content",
           description: "description",
           time: "time",
-          ...this.props
-        }
-        return item[defaultProps[key]] || ''
-      }
-    }
+          ...this.props,
+        };
+        return item[defaultProps[key]] || "";
+      };
+    },
   },
   mounted() {
+    console.log(111);
+    console.log(this.$slot);
     this.getList();
   },
   methods: {
@@ -99,12 +106,12 @@ export default {
     // 点击已读
     setNotify(item) {
       // 去除消息
-      this.moveMsg(item.id);
+      this.moveAnimate && this.moveMsg(item.id);
       this.$emit("read", item);
     },
   },
 };
 </script>
 <style lang="scss" scoped>
-@import "./list.scss";
+@import "list.scss";
 </style>
