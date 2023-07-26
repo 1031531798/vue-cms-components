@@ -28,6 +28,7 @@
           :props="messageProps"
           :data="getMessageList"
           :move-animate="moveAnimate"
+          :itemClass="itemClass"
           @read="handleReadMsg"
         >
           <!--          <template #message slot-scope="{data}">-->
@@ -79,6 +80,10 @@ export default {
     moveAnimate: {
       type: Boolean,
       default: true,
+    },
+    itemClass: {
+      type: [Function, String],
+      default: "",
     },
     messageProps: {
       type: Object,

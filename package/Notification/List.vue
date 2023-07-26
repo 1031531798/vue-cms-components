@@ -3,7 +3,7 @@
     <ul :class="`${prefixCls}-main`" style="overflow: auto" v-if="data.length">
       <li
         v-for="item in data"
-        :class="`${prefixCls}-main-item`"
+        :class="`${prefixCls}-main-item ${getItemClass(item)}`"
         :ref="getMessageProps('key', item)"
         :key="getMessageProps('key', item)"
         :title="getMessageProps('content', item)"
@@ -43,6 +43,7 @@
 
 <script>
 import "./list.scss";
+import { isFunction, isString } from "../../src/utils/is.js";
 export default {
   name: "NotificationList",
   data() {
@@ -61,12 +62,24 @@ export default {
       type: Object,
       required: true,
     },
+    itemClass: {
+      type: [Function, String],
+      default: "",
+    },
     moveAnimate: {
       type: Boolean,
       default: true,
     },
   },
   computed: {
+    getItemClass() {
+      return (item) => {
+        if (isFunction(this.itemClass)) {
+          return this.itemClass(item);
+        }
+        return isString(this.itemClass) ? this.itemClass || '';
+      };
+    },
     getMessageProps() {
       return (key, item) => {
         const defaultProps = {
