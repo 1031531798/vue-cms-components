@@ -3,9 +3,9 @@
     <div :class="`${prefixCls}-main`" style="overflow: auto" v-if="data.length">
       <div
         v-for="item in data"
+        :class="`wrapper ${getItemClass(item)}`"
         :ref="getMessageProps('key', item)"
         :key="getMessageProps('key', item)"
-        :title="getMessageProps('content', item)"
         @click="setNotify(item)"
       >
         <MessageNode
@@ -13,7 +13,11 @@
           :data="item"
           :class="`${prefixCls}-main-item ${getItemClass(item)}`"
         />
-        <div v-else :class="`${prefixCls}-main-item ${getItemClass(item)}`">
+        <div
+          v-else
+          :class="`${prefixCls}-main-item`"
+          :title="getMessageProps('content', item)"
+        >
           <img
             v-if="getMessageProps('avatar', item)"
             :src="getMessageProps('avatar', item)"
@@ -128,12 +132,14 @@ export default {
     // 已读移除消息
     moveMsg(id) {
       const cell = this.$refs[id][0];
+      // 设置初始高度
+      cell.style.height = cell.offsetHeight + "px";
       cell.className =
         cell.className + " animate__animated animate__fadeOutLeft";
       // 设置移除后的重排
       setTimeout(() => {
+        cell.style.width = 0;
         cell.style.height = 0;
-        cell.style.padding = 0;
       }, 600);
       // 重拍结束后删除元素
       setTimeout(() => {
@@ -142,8 +148,8 @@ export default {
     },
     // 点击已读
     setNotify(item) {
-      // 去除消息
       this.moveAnimate && this.moveMsg(item.id);
+      // 去除消息
       this.$emit("read", item);
     },
   },
@@ -159,15 +165,24 @@ export default {
     min-height: 250px;
     display: flex;
     flex-direction: column;
+    .wrapper {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      transition: all 0.3s ease-in-out;
+      width: 100%;
+      padding: 0;
+    }
     &-item {
       display: flex;
       flex-direction: row;
       justify-content: flex-start;
       align-items: flex-start;
       flex-grow: 1;
-      width: 100%;
       cursor: pointer;
       padding: 10px;
+      width: 100%;
+      height: 100%;
       transition: all 0.5s ease-in-out;
       &-avatar {
         width: 40px;
