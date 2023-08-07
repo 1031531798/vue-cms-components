@@ -42,7 +42,6 @@
 </template>
 
 <script>
-import "./list.scss";
 import { isFunction, isString } from "../../src/utils/is.js";
 export default {
   name: "NotificationList",
