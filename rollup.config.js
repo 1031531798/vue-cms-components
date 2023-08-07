@@ -5,6 +5,7 @@ import commonjs from "@rollup/plugin-commonjs";
 import image from "@rollup/plugin-image";
 import typescript from "@rollup/plugin-typescript";
 import json from "@rollup/plugin-json";
+import terser from "@rollup/plugin-terser";
 import postcss from "rollup-plugin-postcss";
 import autoprefixer from "autoprefixer";
 import postcssImport from "postcss-import";
@@ -20,13 +21,18 @@ export default defineConfig({
       format: "es",
       sourcemap: false,
     },
-    {
-      file: "dist/index.umd.js",
-      format: "umd",
-      name: "index",
-    },
+    // {
+    //   file: "dist/index.umd.js",
+    //   format: "umd",
+    //   name: "index",
+    // },
   ],
   plugins: [
+    terser({
+      compress: {
+        drop_console: true,
+      },
+    }),
     commonjs(),
     typescript(),
     postcss({
