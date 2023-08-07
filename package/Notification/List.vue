@@ -1,7 +1,7 @@
 <template>
   <div :class="prefixCls">
-    <ul :class="`${prefixCls}-main`" style="overflow: auto" v-if="data.length">
-      <li
+    <div :class="`${prefixCls}-main`" style="overflow: auto" v-if="data.length">
+      <div
         v-for="item in data"
         :class="`${prefixCls}-main-item ${getItemClass(item)}`"
         :ref="getMessageProps('key', item)"
@@ -27,11 +27,11 @@
             </div>
           </div>
         </div>
-      </li>
-      <li :class="`${prefixCls}-hint`">
+      </div>
+      <div :class="`${prefixCls}-hint`">
         <span>没有更多了...</span>
-      </li>
-    </ul>
+      </div>
+    </div>
     <div :class="`${prefixCls}-empty`" v-else>
       <slot name="empty">
         <img src="./image/empty.png" width="150" alt="empty" />
@@ -74,10 +74,11 @@ export default {
   computed: {
     getItemClass() {
       return (item) => {
+        if (!this.itemClass) return "";
         if (isFunction(this.itemClass)) {
           return this.itemClass(item);
         }
-        return isString(this.itemClass) ? this.itemClass || '';
+        return isString(this.itemClass) ? this.itemClass : "";
       };
     },
     getMessageProps() {
@@ -95,7 +96,6 @@ export default {
     },
   },
   mounted() {
-    console.log(111);
     console.log(this.$slot);
     this.getList();
   },
@@ -126,5 +126,74 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "list.scss";
+.components-notify-list {
+  width: 100%;
+  &-main {
+    list-style-type: none;
+    width: 100%;
+    padding: 0;
+    min-height: 250px;
+    display: flex;
+    flex-direction: column;
+    &-item {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: flex-start;
+      flex-grow: 1;
+      width: 100%;
+      cursor: pointer;
+      padding: 10px;
+      transition: all 0.5s ease-in-out;
+      &-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+      }
+      &:hover {
+        background: rgb(236, 245, 255);
+      }
+      &-title {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        flex-grow: 1;
+        width: 80%;
+        margin: 0 10px;
+        color: #00000073;
+        font-size: 14px;
+        &-desc {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          color: #999;
+        }
+        span:first-child {
+          color: black;
+          padding-bottom: 5px;
+          white-space: nowrap;
+          text-align: left;
+        }
+      }
+    }
+  }
+  &-hint {
+    color: #999;
+    padding: 10px 0;
+    text-align: center;
+  }
+  &-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    span {
+      color: #999;
+    }
+  }
+}
+.msg-hide {
+  height: 0;
+}
 </style>
