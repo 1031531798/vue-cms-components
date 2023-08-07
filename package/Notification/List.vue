@@ -3,27 +3,32 @@
     <div :class="`${prefixCls}-main`" style="overflow: auto" v-if="data.length">
       <div
         v-for="item in data"
-        :class="`${prefixCls}-main-item ${getItemClass(item)}`"
         :ref="getMessageProps('key', item)"
         :key="getMessageProps('key', item)"
         :title="getMessageProps('content', item)"
         @click="setNotify(item)"
       >
-        <slot name="message" :data="item"></slot>
-        <img
-          v-if="getMessageProps('avatar', item)"
-          :src="getMessageProps('avatar', item)"
-          alt="avatar"
-          :class="`${prefixCls}-main-item-avatar`"
+        <MessageNode
+          v-if="hasCustomMessage"
+          :data="item"
+          :class="`${prefixCls}-main-item ${getItemClass(item)}`"
         />
-        <div :class="`${prefixCls}-main-item-title`">
-          <span class="text-ellipsis">{{
-            getMessageProps("content", item)
-          }}</span>
-          <div :class="`${prefixCls}-main-item-title-desc`">
-            <div>{{ getMessageProps("time", item) }}</div>
-            <div style="margin-left: 10px">
-              {{ getMessageProps("description", item) }}
+        <div v-else :class="`${prefixCls}-main-item ${getItemClass(item)}`">
+          <img
+            v-if="getMessageProps('avatar', item)"
+            :src="getMessageProps('avatar', item)"
+            alt="avatar"
+            :class="`${prefixCls}-main-item-avatar`"
+          />
+          <div :class="`${prefixCls}-main-item-title`">
+            <span class="text-ellipsis">{{
+              getMessageProps("content", item)
+            }}</span>
+            <div :class="`${prefixCls}-main-item-title-desc`">
+              <div>{{ getMessageProps("time", item) }}</div>
+              <div style="margin-left: 10px">
+                {{ getMessageProps("description", item) }}
+              </div>
             </div>
           </div>
         </div>
@@ -52,6 +57,20 @@ export default {
       moveId: "",
     };
   },
+  components: {
+    MessageNode: {
+      props: {
+        data: {
+          type: Object,
+        },
+      },
+      render() {
+        const data = this.data;
+        const parent = this.$parent.parent;
+        return parent.$scopedSlots.message({ data });
+      },
+    },
+  },
   props: {
     data: {
       type: Array,
@@ -71,6 +90,12 @@ export default {
     },
   },
   computed: {
+    parent() {
+      return this.$parent;
+    },
+    hasCustomMessage() {
+      return this.parent?.$scopedSlots?.message;
+    },
     getItemClass() {
       return (item) => {
         if (!this.itemClass) return "";
@@ -95,10 +120,10 @@ export default {
     },
   },
   mounted() {
-    console.log(this.$slot);
     this.getList();
   },
   methods: {
+    renderSlots() {},
     getList() {},
     // 已读移除消息
     moveMsg(id) {

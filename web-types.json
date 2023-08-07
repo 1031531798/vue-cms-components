@@ -1,7 +1,7 @@
 {
   "framework": "vue",
   "name": "vue-cms-components",
-  "version": "1.0.0",
+  "version": "1.0.13",
   "description-markup": "markdown",
   "contributions": {
     "html": {
@@ -24,6 +24,51 @@
               "name": "hintText",
               "description": "hint text",
               "type": "string"
+            },
+            {
+              "name": "headerList",
+              "description": "渲染header 列表",
+              "type": "array"
+            },
+            {
+              "name": "trigger",
+              "description": "触发方式",
+              "type": "string"
+            },
+            {
+              "name": "moveAnimate",
+              "description": "是否启用已读动画",
+              "type": "boolean"
+            },
+            {
+              "name": "itemClass",
+              "description": "message item自定义class",
+              "type": "string"
+            },
+            {
+              "name": "messageProps",
+              "description": "message的自定义属性配置",
+              "type": "string"
+            },
+            {
+              "name": "popperClass",
+              "description": "弹出层的自定义class",
+              "type": "string"
+            }
+          ],
+          "slots": [
+            {
+              "name": "default",
+              "description": "自定义通知按钮"
+            },
+            {
+              "name": "header",
+              "description": "设置自定义通知header区域"
+            },
+            {
+              "name": "message",
+              "description": "自定义消息节点",
+              "type": "{data: any}"
             }
           ]
         },
