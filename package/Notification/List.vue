@@ -38,7 +38,7 @@
         </div>
       </div>
       <div :class="`${prefixCls}-hint`">
-        <span>{{props.name ? '没有更多了...' : '没有更多了...'}}</span>
+        <span>{{ finishText || "没有更多了..." }}</span>
       </div>
     </div>
     <div :class="`${prefixCls}-empty`" v-else>
@@ -83,6 +83,9 @@ export default {
     props: {
       type: Object,
       required: true,
+    },
+    finishText: {
+      type: String,
     },
     itemClass: {
       type: [Function, String],
