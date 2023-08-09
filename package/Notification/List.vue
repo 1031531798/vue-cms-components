@@ -38,7 +38,7 @@
         </div>
       </div>
       <div :class="`${prefixCls}-hint`">
-        <span>没有更多了...</span>
+        <span>{{props.name ? '没有更多了...' : '没有更多了...'}}</span>
       </div>
     </div>
     <div :class="`${prefixCls}-empty`" v-else>
@@ -102,7 +102,7 @@ export default {
     },
     getItemClass() {
       return (item) => {
-        if (!this.itemClass) return "";
+        if (!this?.itemClass) return "";
         if (isFunction(this.itemClass)) {
           return this.itemClass(item);
         }
@@ -157,7 +157,11 @@ export default {
 </script>
 <style lang="scss" scoped>
 .components-notify-list {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
   width: 100%;
+  height: 80%;
   &-main {
     list-style-type: none;
     width: 100%;
