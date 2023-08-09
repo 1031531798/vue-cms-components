@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 4134910 */
-  src: url('iconfont.woff2?t=1689232867913') format('woff2'),
-       url('iconfont.woff?t=1689232867913') format('woff'),
-       url('iconfont.ttf?t=1689232867913') format('truetype');
+  src: url('iconfont.woff2?t=1690873250304') format('woff2'),
+       url('iconfont.woff?t=1690873250304') format('woff'),
+       url('iconfont.ttf?t=1690873250304') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,190 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-IMAGE:before {
+  content: "\e66b";
+}
+
+.icon-TIFF:before {
+  content: "\e66c";
+}
+
+.icon-JPEG:before {
+  content: "\e66d";
+}
+
+.icon-GIF:before {
+  content: "\e66f";
+}
+
+.icon-BMP:before {
+  content: "\e670";
+}
+
+.icon-SVG:before {
+  content: "\e671";
+}
+
+.icon-DOC:before {
+  content: "\e672";
+}
+
+.icon-DOCX:before {
+  content: "\e673";
+}
+
+.icon-XLS:before {
+  content: "\e674";
+}
+
+.icon-XLSX:before {
+  content: "\e675";
+}
+
+.icon-PPTX:before {
+  content: "\e676";
+}
+
+.icon-WPS:before {
+  content: "\e677";
+}
+
+.icon-WT:before {
+  content: "\e678";
+}
+
+.icon-ET:before {
+  content: "\e679";
+}
+
+.icon-MP4:before {
+  content: "\e67c";
+}
+
+.icon-TXT:before {
+  content: "\e67e";
+}
+
+.icon-WPT:before {
+  content: "\e67f";
+}
+
+.icon-DPS:before {
+  content: "\e680";
+}
+
+.icon-DPT:before {
+  content: "\e681";
+}
+
+.icon-ETT:before {
+  content: "\e682";
+}
+
+.icon-OTHER:before {
+  content: "\e69a";
+}
+
+.icon-FLV:before {
+  content: "\e69e";
+}
+
+.icon-PNG:before {
+  content: "\e69f";
+}
+
+.icon-XML:before {
+  content: "\e6a0";
+}
+
+.icon-TIF:before {
+  content: "\e6a1";
+}
+
+.icon-EXCEL:before {
+  content: "\e6a2";
+}
+
+.icon-PPT:before {
+  content: "\e6a3";
+}
+
+.icon-WORD:before {
+  content: "\e6a4";
+}
+
+.icon-JPG:before {
+  content: "\e6a5";
+}
+
+.icon-DOT:before {
+  content: "\e7c0";
+}
+
+.icon-PS:before {
+  content: "\e7c1";
+}
+
+.icon-OFD:before {
+  content: "\e7c2";
+}
+
+.icon-RTF:before {
+  content: "\e7c3";
+}
+
+.icon-XSD:before {
+  content: "\e7c4";
+}
+
+.icon-HTML:before {
+  content: "\e7c5";
+}
+
+.icon-HTML1:before {
+  content: "\e7c6";
+}
+
+.icon-GD:before {
+  content: "\e7c7";
+}
+
+.icon-GIFF:before {
+  content: "\e7c8";
+}
+
+.icon-SEP:before {
+  content: "\e7c9";
+}
+
+.icon-DWG:before {
+  content: "\e7ca";
+}
+
+.icon-CEBX:before {
+  content: "\e7cb";
+}
+
+.icon-CEB:before {
+  content: "\e7cc";
+}
+
+.icon-ZIP:before {
+  content: "\e7e9";
+}
+
+.icon-PDF:before {
+  content: "\e7ea";
+}
+
+.icon-a-ziyuan1:before {
+  content: "\e7eb";
+}
+
+.icon-JASPER:before {
+  content: "\e7ec";
 }
 
 .icon-yunshangchuan_o:before {
