@@ -5,7 +5,7 @@ import commonjs from "@rollup/plugin-commonjs";
 import image from "@rollup/plugin-image";
 import typescript from "@rollup/plugin-typescript";
 import json from "@rollup/plugin-json";
-import terser from "@rollup/plugin-terser";
+// import terser from "@rollup/plugin-terser";
 import postcss from "rollup-plugin-postcss";
 import autoprefixer from "autoprefixer";
 import postcssImport from "postcss-import";
@@ -21,20 +21,19 @@ export default defineConfig({
       format: "es",
       sourcemap: false,
     },
-    // {
-    //   file: "dist/index.umd.js",
-    //   format: "umd",
-    //   name: "index",
-    // },
+    {
+      file: "dist/index.umd.js",
+      format: "umd",
+      name: "index",
+    },
   ],
   plugins: [
-    terser({
-      compress: {
-        drop_console: true,
-      },
+    vue({
+      include: /.vue$/,
+      compileTemplate: true
     }),
-    commonjs(),
     typescript(),
+    commonjs(),
     postcss({
       // 内联css
       minimize: true,
@@ -48,12 +47,13 @@ export default defineConfig({
         }),
       ],
     }),
-    babel({
-      exclude: "node_modules/**",
-      babelHelpers: "bundled",
-    }),
     json(),
-    vue(),
     image(),
+    babel({
+      presets: ["@babel/preset-env"],
+      plugins: ["@babel/plugin-transform-optional-chaining"], // 启用可选链语法支持
+      exclude: "node_modules/**",
+      babelHelpers: "inline",
+    }),
   ],
 });
