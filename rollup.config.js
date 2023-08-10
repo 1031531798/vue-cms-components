@@ -11,8 +11,11 @@ import autoprefixer from "autoprefixer";
 import postcssImport from "postcss-import";
 import cssnano from "cssnano";
 import path from "path";
+import vueSfcBabelTransform from "./build/vueSfcBabelTransform.js";
 
 const __dirname = "/";
+
+
 export default defineConfig({
   input: "src/main.js",
   output: [
@@ -28,12 +31,12 @@ export default defineConfig({
     },
   ],
   plugins: [
-    vue({
-      include: /.vue$/,
-      compileTemplate: true
-    }),
-    typescript(),
     commonjs(),
+    vue({}),
+    // vueSfcBabelTransform({
+    //   plugins: ["@babel/plugin-transform-optional-chaining"], // 启用可选链语法支持
+    // }),
+    typescript(),
     postcss({
       // 内联css
       minimize: true,
@@ -50,8 +53,16 @@ export default defineConfig({
     json(),
     image(),
     babel({
-      presets: ["@babel/preset-env"],
+      presets: [
+        [
+          "@babel/preset-env",
+          {
+            targets: "last 2 versions, > 0.5%, IE 11",
+          },
+        ],
+      ],
       plugins: ["@babel/plugin-transform-optional-chaining"], // 启用可选链语法支持
+      include: ['js', 'ts', 'vue'],
       exclude: "node_modules/**",
       babelHelpers: "inline",
     }),

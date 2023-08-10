@@ -46,6 +46,11 @@
               "type": "string"
             },
             {
+              "name": "finishText",
+              "description": "设置结束描述字",
+              "type": "string"
+            },
+            {
               "name": "messageProps",
               "description": "message的自定义属性配置",
               "type": "string"

@@ -1,6 +1,6 @@
 {
   "name": "vue-cms-components",
-  "version": "1.0.21",
+  "version": "1.1.1",
   "description": "vue2 cms system components",
   "main": "./dist/bundle.js",
   "module": "./dist/bundle.js",
@@ -20,7 +20,8 @@
     "server": "concurrently \"pnpm dev\" \"pnpm watch\"",
     "build": "rollup --config",
     "watch": "rollup --config --watch",
-    "publish": "concurrently \"./node_modules/.bin/babel dist --out-dir dist\" \"npm publish\""
+    "publish": "concurrently \"npm run build\" \"npm publish\"",
+    "build-min": "rollup -c"
   },
   "keywords": [],
   "author": "1031531798",
@@ -38,7 +39,6 @@
     "vuex": "^4.0.2"
   },
   "devDependencies": {
-    "@babel/cli": "^7.22.10",
     "@babel/core": "^7.22.10",
     "@babel/plugin-transform-optional-chaining": "^7.22.10",
     "@babel/preset-env": "^7.22.10",
@@ -51,6 +51,7 @@
     "@rollup/plugin-typescript": "^11.0.0",
     "@rollup/plugin-url": "^8.0.1",
     "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/compiler-sfc": "^3.3.4",
     "autoprefixer": "^10.4.14",
     "concurrently": "^8.2.0",
     "core-js": "^3.6.5",
