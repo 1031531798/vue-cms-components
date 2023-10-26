@@ -8,23 +8,25 @@
         :file-name="item.fileName"
         :class="item.type === 'file' ? 'file-item' : 'img-item'"
       >
-        <div
-          class="file-container"
-          v-if="item.type === 'file'"
-          :class="{
-            'filter-bg': typeof item.progress === 'number',
-          }"
-          :style="`background-color: ${
-            fileTypeColor[item.suffix] ? fileTypeColor[item.suffix] : 'gray'
-          }`"
-        >
-          <div class="file-suffix">{{ item.suffix }}</div>
+        <div class="file-over"></div>
+<!--        <div class="file-status-box" :class="{'status-translate': item.progress === ''}">-->
+<!--          <svg width="54px" height="54px" viewBox="0 0 54 54" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <title>Check</title> <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <path d="M23.5,31.8431458 L17.5852419,25.9283877 C16.0248253,24.3679711 13.4910294,24.366835 11.9289322,25.9289322 C10.3700136,27.4878508 10.3665912,30.0234455 11.9283877,31.5852419 L20.4147581,40.0716123 C20.5133999,40.1702541 20.6159315,40.2626649 20.7218615,40.3488435 C22.2835669,41.8725651 24.794234,41.8626202 26.3461564,40.3106978 L43.3106978,23.3461564 C44.8771021,21.7797521 44.8758057,19.2483887 43.3137085,17.6862915 C41.7547899,16.1273729 39.2176035,16.1255422 37.6538436,17.6893022 L23.5,31.8431458 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z" stroke-opacity="0.198794158" stroke="#747474" fill-opacity="0.816519475" fill="#FFFFFF"></path> </g> </svg>-->
+<!--        </div>-->
+        <div class="file-container" v-if="item.type === 'file'">
+          <FileUploadStatusMark :show="item.progress === ''" />
+          <IconFontSvg
+            :class="{
+              'filter-bg': typeof item.progress === 'number',
+            }"
+            :icon="fileTypeColor[item.suffix]"
+          />
           <FileProgress
             v-if="typeof item.progress === 'number'"
             :progress="item.progress"
           />
         </div>
         <div class="img-container" v-else>
+          <FileUploadStatusMark :show="item.progress === ''" />
           <img
             :src="item.url"
             class="file-img"
@@ -46,41 +48,19 @@
             size="40"
           />
         </div>
-        <svg
+        <span
           v-if="!readOnly"
           class="closeBtn"
-          viewBox="0 0 100 100"
-          height="30%"
-          width="30%"
-          @click="handleDeleteFile(item)"
-        >
-          <path
-            d="M 0 0 L 85 0 A 15,15 0 0,1 100,15 L 100 100 L 0 0 z"
-            fill="#f00"
-          ></path>
-          <path
-            d="M 55 15 L 85 45z M 85 15 L 55 45 z"
-            stroke="#fff"
-            stroke-width="5"
-            stroke-linecap="round"
-          ></path>
-        </svg>
+          @click="handleDeleteFile">
+          <IconFontSvg icon="icon-guanbi" :size="15" />
+        </span>
       </div>
       <div
         v-if="!readOnly && uploadFiles.length < limit"
         class="add-button"
         @click="handleClick"
-        :class="loading ? 'disabled' : ''"
       >
         <IconFontSvg icon="icon-yunshangchuan_o" size="50" color="#fff" />
-        <input
-          type="file"
-          :accept="fileAccept"
-          ref="file"
-          @change="fileUpload"
-          multiple
-          style="display: none"
-        />
       </div>
     </div>
     <div
@@ -100,8 +80,10 @@ import fileColor from "./fileTypeColor.json";
 import FileProgress from "./fileProgress.vue";
 import BMF from "browser-md5-file";
 import { request } from "../../src/utils/request.js";
-import { getFileLocalUrl } from "../../src/utils/file.js";
+import { getFileLocalUrl, openFileSelect } from "../../src/utils/file.js";
 import IconFontSvg from "../../src/components/Icon/IconFontSvg.vue";
+import SnowflakeId from 'snowflake-id'
+import FileUploadStatusMark from "./fileStatusMark.vue";
 const imgType = [".bmp", ".gif", ".jpg", ".jpeg", ".png"];
 const fileTypes = [
   ".doc",
@@ -123,6 +105,10 @@ const fileTypes = [
   ".pdf",
   ".md",
 ];
+const snowflake = new SnowflakeId({
+  mid: 42,
+  offset: (2019 - 1970) * 31536000 * 1000
+})
 export default {
   name: "VccFileUploader",
   data() {
@@ -138,6 +124,7 @@ export default {
     };
   },
   components: {
+    FileUploadStatusMark,
     IconFontSvg,
     FileProgress,
   },
@@ -249,44 +236,45 @@ export default {
     },
     // 文件上传
     fileUpload(file) {
-      const files = file.target.files;
       // // 文件数量限制
       if (this.uploadFiles.length >= this.limit) {
         this.$emit("verify", `上传文件数量不得超过${this.limit}个`);
         return false;
       }
       // 判断文件大小
-      if (files[0].size > 1024 * 1024 * this.fileSize) {
+      if (file.size > 1024 * 1024 * this.fileSize) {
         this.$emit("verify", `上传文件大小不得超过${this.fileSize}MB`);
         return false;
       }
-      if (files[0].size === 0) {
+      if (file.size === 0) {
         this.$emit("verify", `不能上传空文件`);
         return false;
       }
       // 判断文件类型
-      const fileType = files[0].type.split("/")[0] === "image" ? "img" : "file";
+      const fileType = file.type.split("/")[0] === "image" ? "img" : "file";
       if (this.imgOnly && fileType !== "img") {
         return false;
       }
       this.loading = true;
-      const id = new Date().valueOf();
+      const id = snowflake.generate();
 
-      getFileLocalUrl(files[0], (result) => {
+      getFileLocalUrl(file, (result) => {
         // 添加进度条
         this.uploadFiles.push({
           progress: 0,
           id,
-          fileName: files[0].name,
+          fileName: file.name,
+          suffix: file.name.split(".").at(-1),
           type: fileType,
           url: result,
         });
       });
-      const index = this.uploadFiles.findIndex((item) => item.id === id);
       const data = new FormData();
       const bmf = new BMF();
-      bmf.md5(file.target.files[0], (err, md5) => {
-        data.append(this.name, file.target.files[0]);
+      const index = this.uploadFiles.findIndex((item) => item.id === id);
+      console.log( this.uploadFiles);
+      bmf.md5(file, (err, md5) => {
+        data.append(this.name, file);
         request({
           url: this.action,
           method: this.requestMethod,
@@ -295,57 +283,52 @@ export default {
           baseURL: "/",
           data,
           progress: (e) => {
-            if (this.uploadFiles[this.uploadFiles.length - 1]) {
+            const index = this.getFileIndexById(id)
+            if (this.uploadFiles[index]) {
               const rate = Math.floor((e.loaded / e.total) * 100);
-              this.uploadFiles[this.uploadFiles.length - 1].progress = rate;
+              this.uploadFiles[index].progress = rate;
               if (rate === 100) {
                 setTimeout(() => {
-                  this.uploadFiles[this.uploadFiles.length - 1].progress = "";
+                  this.uploadFiles[index].progress = "";
                 }, 500);
               }
             }
           },
         })
           .then(({ data }) => {
+            // 上传成功
             this.isUpload = true;
             this.$emit("change", [...this.currentFiles, { ...data.data }]);
-            if (fileType === "img") {
-              this.$set(this.uploadFiles, index, {
-                id,
-                ...data.data,
-                type: fileType,
-                url: data.data,
-              });
-            } else {
-              this.$set(this.uploadFiles, index, {
-                id,
-                suffix: data.data.fileName.slice(
-                  data.data.fileName.lastIndexOf(".") + 1
-                ),
-                type: fileType,
-                ...data.data,
-              });
-            }
             this.loading = false;
           })
           .catch((err) => {
-            console.log(err);
+            const index = this.getFileIndexById(id)
             this.$emit("uploadError", err);
             this.uploadFiles.splice(index, 1);
             this.loading = false;
           });
       });
     },
+    // 根据id获取文件列表中的文件索引
+    getFileIndexById (id) {
+      return this.uploadFiles.findIndex((item) => item.id === id);
+    },    // add upload
     handleClick() {
-      this.$refs.file.value = "";
-      this.$refs.file.click();
+      openFileSelect({accept: this.fileAccept, multiple: true}).then((files) => {
+        for (const file of files) {
+          this.fileUpload(file)
+        }
+      })
     },
+    // preview file
     handlePreview(file) {},
+    // download file
     handleDownloadFile(file) {
       // window.open(file);
     },
+    // 删除 文件
     handleDeleteFile(file) {
-      const pathProp = "path";
+      const pathProp = "id";
       this.$emit(
         "change",
         this.currentFiles.filter((item) => item[pathProp] !== file[pathProp])
@@ -359,185 +342,6 @@ export default {
 };
 </script>
 
-<style lang="scss">
-$--border-radius: 10px;
-@keyframes fileSlide {
-  0% {
-    opacity: 0;
-    transform: translateY(-15px);
-  }
-  100% {
-    transform: translateY(0);
-  }
-}
-.file-uploader {
-  .file-list {
-    display: grid;
-    width: 100%;
-    justify-content: start;
-    align-items: center;
-    gap: 5px;
-    grid-auto-flow: row dense;
-    grid-template-columns: repeat(auto-fill, 50px);
-    grid-template-rows: repeat(auto-fill, 50px);
-
-    .file-card {
-      position: relative;
-      border-radius: $--border-radius;
-      animation: fileSlide 1s;
-      .closeBtn {
-        position: absolute;
-        right: 0;
-        top: 0;
-        visibility: hidden;
-        cursor: pointer;
-      }
-      .file-btn {
-        top: 0;
-        display: flex;
-        position: absolute;
-        height: 100%;
-        width: 100%;
-        background: rgba(0, 0, 0, 0.281);
-        border-radius: $--border-radius;
-        transform: scale(0, 0);
-        transition: transform 0.5s;
-        gap: 10px;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        svg:hover {
-          fill: #f8d86a !important;
-        }
-      }
-      &:hover {
-        box-shadow: 0 2px 12px 0 #40a0ff;
-        .file-btn {
-          transform: scale(1, 1);
-        }
-        .closeBtn {
-          visibility: visible;
-        }
-      }
-    }
-    .file-item {
-      // height: 50px;
-      // width: 50px;
-      // background: #40a0ff;
-      height: 105px;
-      width: 105px;
-      grid-area: span 2 / span 2;
-    }
-    // .file-item,
-    .img-item {
-      // background: #40a0ff;
-      height: 105px;
-      width: 105px;
-      grid-area: span 2 / span 2;
-    }
-    .file-popover {
-      &::before {
-        content: attr(file-name);
-        position: absolute;
-        opacity: 0;
-        bottom: 90%;
-        z-index: 10;
-        transition: all 0.5s;
-        // white-space: nowrap;
-        border-radius: 5px;
-        background: #40a0ffc5;
-        border: 1px solid #40a0ff;
-        color: #fff;
-        padding: 5px 10px;
-        line-height: 15px;
-        width: 180px;
-        left: -20%;
-        text-align: center;
-        pointer-events: none;
-      }
-      &:hover::before {
-        opacity: 1;
-        bottom: calc(100% + 12px);
-        pointer-events: all;
-      }
-      &::after {
-        content: "";
-        opacity: 0;
-        position: absolute;
-        bottom: calc(90% - 5px);
-        left: calc(50% - 5px);
-        width: 0;
-        height: 0;
-        transition: all 0.5s;
-        border-top: 5px solid #40a0ff;
-        border-right: 5px solid transparent;
-        border-left: 5px solid transparent;
-      }
-      &:hover::after {
-        opacity: 1;
-        bottom: calc(100% + 7px);
-      }
-    }
-    .file-container,
-    .img-container {
-      position: relative;
-      height: 100%;
-      width: 100%;
-      border-radius: $--border-radius;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      overflow: hidden;
-      .file-img {
-        height: 100%;
-        width: 100%;
-        object-fit: cover;
-        border-radius: $--border-radius;
-      }
-      .file-suffix {
-        background-color: rgba(255, 255, 255, 0.5);
-        line-height: 18px;
-        text-align: center;
-        border-bottom-left-radius: 6px;
-        border-bottom-right-radius: 6px;
-        user-select: none;
-      }
-    }
-    .add-button {
-      position: relative;
-      height: 105px;
-      width: 105px;
-      border-radius: $--border-radius;
-      border: 1px dashed rgb(172, 172, 172);
-      grid-area: span 2 / span 2;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      &:hover {
-        border-color: #000;
-      }
-    }
-    .disabled {
-      pointer-events: none;
-      cursor: not-allowed;
-    }
-  }
-  .file-type-hint {
-    font-size: 12px;
-    color: #999;
-    display: flex;
-    &-text {
-      width: 80%;
-      max-width: 500px;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
-      user-select: none;
-    }
-  }
-}
-.filter-bg {
-  filter: blur(8px);
-}
+<style lang="scss" scoped>
+@import "uploadStyle";
 </style>
