@@ -1,43 +1,50 @@
-export function is (val, type) {
-  return toString.call(val) === `[object ${type}]`
+export function is(val, type) {
+  return toString.call(val) === `[object ${type}]`;
 }
 
-export function isEmpty (val) {
+export function isEmpty(val) {
   if (isArray(val) || isString(val)) {
-    return val.length === 0
+    return val.length === 0;
   }
 
   if (val instanceof Map || val instanceof Set) {
-    return val.size === 0
+    return val.size === 0;
   }
 
   if (isObject(val)) {
-    return Object.keys(val).length === 0
+    return Object.keys(val).length === 0;
   }
 
-  return false
+  return false;
 }
-export function isObject (val) {
-  return val !== null && is(val, 'Object')
+export function isObject(val) {
+  return val !== null && is(val, "Object");
+}
+export function isFunction(val) {
+  return val !== null && typeof val === "function";
 }
 
-export function isArray (val) {
-  return val && Array.isArray(val)
+export function isArray(val) {
+  return val && Array.isArray(val);
 }
-export function isNumber (val) {
-  return is(val, 'Number')
+export function isNumber(val) {
+  return is(val, "Number");
 }
-export function isString (val) {
-  return is(val, 'String')
+export function isString(val) {
+  return is(val, "String");
 }
 
 // 密码强度判断
-export function checkPasswordLevel (rule, value, callback) {
-  let pwdRegex = new RegExp('(?=.*[0-9])(?=.*[a-zA-Z]).{8,30}')
+export function checkPasswordLevel(rule, value, callback) {
+  let pwdRegex = new RegExp("(?=.*[0-9])(?=.*[a-zA-Z]).{8,30}");
   if (pwdRegex.test(value)) {
-    callback()
+    callback();
   } else {
-    callback(new Error('密码中必须包含字母（不区分大小写）、数字，至少8个字符，最多30个字符；'))
+    callback(
+      new Error(
+        "密码中必须包含字母（不区分大小写）、数字，至少8个字符，最多30个字符；"
+      )
+    );
   }
 }
 
@@ -47,12 +54,12 @@ export function checkPasswordLevel (rule, value, callback) {
  * @param {被查找的数组} arr
  * @returns
  */
-export function hasFindIndex (value, arr) {
+export function hasFindIndex(value, arr) {
   if (value !== undefined && Array.isArray(arr)) {
-    const flag = arr.findIndex(num => {
-      return num === value
-    })
-    return flag >= 0
+    const flag = arr.findIndex((num) => {
+      return num === value;
+    });
+    return flag >= 0;
   }
-  return false
+  return false;
 }

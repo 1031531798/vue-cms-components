@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 4134910 */
-  src: url('iconfont.woff2?t=1690873250304') format('woff2'),
-       url('iconfont.woff?t=1690873250304') format('woff'),
-       url('iconfont.ttf?t=1690873250304') format('truetype');
+  src: url('iconfont.woff2?t=1698303856445') format('woff2'),
+       url('iconfont.woff?t=1698303856445') format('woff'),
+       url('iconfont.ttf?t=1698303856445') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-guanbi:before {
+  content: "\e61b";
 }
 
 .icon-IMAGE:before {

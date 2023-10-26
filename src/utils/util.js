@@ -1,6 +1,4 @@
-import Preview from "../../package/Preview/index.js";
 import { isString } from "./is.js";
-
 /**
  * 动态插入js
  */

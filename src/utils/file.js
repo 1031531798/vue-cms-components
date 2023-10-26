@@ -1,11 +1,12 @@
 /**
  * @description 根据二进制数据下载文件
- * @param { 二进制数据源 } ref
- * @param {文件名} fileName
+ * @param { Blob } ref
+ * @param { String } fileName
+ * @param { String } fileType
  */
-export function downloadByBlob(ref, fileName) {
+export function downloadByBlob(ref, fileName, fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
   const blob = new Blob([ref], {
-    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    type: fileType
   });
   const link = document.createElement("a");
   link.href = window.URL.createObjectURL(blob);
@@ -27,11 +28,17 @@ export function getFileLocalUrl(file, callback) {
   });
   reader.readAsDataURL(file);
 }
-export function openFileSelect({ accept = "*" }) {
+
+/**
+ * @description 打开文件选择
+ * @param { String } accept
+ */
+export function openFileSelect({ accept = "*", multiple }) {
   return new Promise((resolve) => {
     const input = document.createElement("input");
     input.type = "file";
     input.accept = accept;
+    input.multiple = multiple;
     input.click();
     input.addEventListener("change", () => {
       resolve(input.files);
